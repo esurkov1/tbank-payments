@@ -11,18 +11,18 @@ const tbank = new TbankPayments({
 async function createSimplePayment() {
   try {
     console.log('=== Создание простого платежа ===');
-    
+
     const payment = await tbank.initPayment({
       Amount: TbankPayments.amountToKopecks(100), // 100 рублей
       OrderId: `order-${Date.now()}`,
       Description: 'Тестовый платеж',
       SuccessURL: 'https://yoursite.com/success',
-      FailURL: 'https://yoursite.com/fail'
+      FailURL: 'https://yoursite.com/fail',
     });
-    
+
     console.log('Платеж создан:', payment.PaymentId);
     console.log('Ссылка для оплаты:', payment.PaymentURL);
-    
+
     return payment;
   } catch (error) {
     console.error('Ошибка создания платежа:', error.message);
@@ -33,7 +33,7 @@ async function createSimplePayment() {
 async function createPaymentWithReceipt() {
   try {
     console.log('\n=== Создание платежа с чеком ===');
-    
+
     // Создаем чек
     const receipt = tbank.createReceipt({
       email: 'customer@example.com',
@@ -44,29 +44,29 @@ async function createPaymentWithReceipt() {
           name: 'Товар 1',
           price: TbankPayments.amountToKopecks(50),
           quantity: 1,
-          tax: 'vat20'
+          tax: 'vat20',
         },
         {
           name: 'Товар 2',
           price: TbankPayments.amountToKopecks(25),
           quantity: 2,
-          tax: 'vat10'
-        }
-      ]
+          tax: 'vat10',
+        },
+      ],
     });
-    
+
     const payment = await tbank.initPayment({
       Amount: TbankPayments.amountToKopecks(100),
       OrderId: `order-receipt-${Date.now()}`,
       Description: 'Платеж с чеком',
       Receipt: receipt,
       SuccessURL: 'https://yoursite.com/success',
-      FailURL: 'https://yoursite.com/fail'
+      FailURL: 'https://yoursite.com/fail',
     });
-    
+
     console.log('Платеж с чеком создан:', payment.PaymentId);
     console.log('Чек:', JSON.stringify(receipt, null, 2));
-    
+
     return payment;
   } catch (error) {
     console.error('Ошибка создания платежа с чеком:', error.message);
@@ -77,14 +77,14 @@ async function createPaymentWithReceipt() {
 async function checkPaymentStatus(paymentId) {
   try {
     console.log('\n=== Проверка статуса платежа ===');
-    
+
     const status = await tbank.getPaymentState({
-      PaymentId: paymentId
+      PaymentId: paymentId,
     });
-    
+
     console.log('Статус платежа:', status.Status);
     console.log('Сумма:', TbankPayments.kopecksToAmount(status.Amount), 'руб.');
-    
+
     return status;
   } catch (error) {
     console.error('Ошибка получения статуса:', error.message);
@@ -95,25 +95,25 @@ async function checkPaymentStatus(paymentId) {
 async function manageCustomer() {
   try {
     console.log('\n=== Управление клиентами ===');
-    
+
     const customerKey = `customer-${Date.now()}`;
-    
+
     // Добавляем клиента
     const customer = await tbank.addCustomer({
       CustomerKey: customerKey,
       Email: 'customer@example.com',
-      Phone: '+79001234567'
+      Phone: '+79001234567',
     });
-    
+
     console.log('Клиент добавлен:', customer.Success);
-    
+
     // Получаем информацию о клиенте
     const customerInfo = await tbank.getCustomer({
-      CustomerKey: customerKey
+      CustomerKey: customerKey,
     });
-    
+
     console.log('Информация о клиенте:', customerInfo.Email);
-    
+
     return customerKey;
   } catch (error) {
     console.error('Ошибка управления клиентом:', error.message);
@@ -124,23 +124,23 @@ async function manageCustomer() {
 async function manageCards(customerKey) {
   try {
     console.log('\n=== Управление картами ===');
-    
+
     // Инициируем добавление карты
     const cardRequest = await tbank.addCard({
       CustomerKey: customerKey,
-      CheckType: '3DS'
+      CheckType: '3DS',
     });
-    
+
     console.log('Запрос на добавление карты:', cardRequest.RequestKey);
     console.log('Ссылка для ввода данных карты:', cardRequest.PaymentURL);
-    
+
     // Получаем список карт клиента
     const cardList = await tbank.getCardList({
-      CustomerKey: customerKey
+      CustomerKey: customerKey,
     });
-    
+
     console.log('Количество карт:', cardList.Cards ? cardList.Cards.length : 0);
-    
+
     return cardRequest;
   } catch (error) {
     console.error('Ошибка управления картами:', error.message);
@@ -151,23 +151,23 @@ async function manageCards(customerKey) {
 async function createQRPayment() {
   try {
     console.log('\n=== QR-код для платежа ===');
-    
+
     // Создаем платеж
     const payment = await tbank.initPayment({
       Amount: TbankPayments.amountToKopecks(50),
       OrderId: `qr-order-${Date.now()}`,
-      Description: 'QR-платеж'
+      Description: 'QR-платеж',
     });
-    
+
     // Получаем QR-код
     const qr = await tbank.getQr({
       PaymentId: payment.PaymentId,
-      DataType: 'PAYLOAD'
+      DataType: 'PAYLOAD',
     });
-    
+
     console.log('QR-код создан для платежа:', payment.PaymentId);
     console.log('QR-данные:', qr.Data);
-    
+
     return { payment, qr };
   } catch (error) {
     console.error('Ошибка создания QR-платежа:', error.message);
@@ -177,24 +177,24 @@ async function createQRPayment() {
 // Пример 7: Проверка подписи webhook
 function verifyWebhookExample() {
   console.log('\n=== Проверка подписи webhook ===');
-  
+
   // Пример данных webhook
   const webhookData = {
     TerminalKey: 'YOUR_TERMINAL_KEY',
     PaymentId: 12345,
     Status: 'CONFIRMED',
     Amount: 10000,
-    OrderId: 'test-order'
+    OrderId: 'test-order',
   };
-  
+
   // Генерируем правильную подпись
   const correctToken = tbank.generateToken(webhookData);
   console.log('Правильная подпись:', correctToken);
-  
+
   // Проверяем подпись
   const isValid = tbank.verifyNotificationSignature(webhookData, correctToken);
   console.log('Подпись валидна:', isValid);
-  
+
   // Проверяем неправильную подпись
   const isInvalid = tbank.verifyNotificationSignature(webhookData, 'wrong-token');
   console.log('Неправильная подпись валидна:', isInvalid);
@@ -203,10 +203,10 @@ function verifyWebhookExample() {
 // Запуск примеров
 async function runExamples() {
   console.log('🚀 Запуск примеров T-Bank Payments\n');
-  
+
   // Пример проверки подписи (не требует API)
   verifyWebhookExample();
-  
+
   // Если у вас есть тестовые ключи, раскомментируйте:
   /*
   const payment1 = await createSimplePayment();
@@ -223,7 +223,7 @@ async function runExamples() {
   
   await createQRPayment();
   */
-  
+
   console.log('\n✅ Примеры завершены');
 }
 
@@ -239,5 +239,5 @@ module.exports = {
   manageCustomer,
   manageCards,
   createQRPayment,
-  verifyWebhookExample
-}; 
+  verifyWebhookExample,
+};

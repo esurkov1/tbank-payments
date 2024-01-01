@@ -1,8 +1,9 @@
 {
   "name": "tbank-payments",
-  "version": "1.0.4",
+  "version": "1.2.0",
   "description": "Библиотека для интеграции с API T-Bank эквайринг. Поддерживает платежи картами, СБП, рекуррентные платежи, управление клиентами и картами, QR-коды.",
   "main": "index.js",
+  "types": "index.d.ts",
   "author": "esurkov1",
   "license": "MIT",
   "keywords": [
@@ -25,23 +26,41 @@
   },
   "homepage": "https://github.com/esurkov1/tbank-payments#readme",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "axios": "^1.10.0",
+    "axios-retry": "^4.5.0",
     "joi": "^17.13.3"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/node": "^22.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.7",
     "jest": "^30.0.4",
-    "@types/node": "^22.0.0"
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.3.3",
+    "semantic-release": "^23.0.2"
   },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --config jest.integration.config.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky install"
   },
   "files": [
     "index.js",
+    "index.d.ts",
+    "lib",
     "README.md",
     "LICENSE"
   ]
