@@ -1,5 +1,6 @@
 // Setup для интеграционных тестов
-// Здесь можно добавить общую настройку для интеграционных тестов
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 // Увеличиваем таймаут Jest для интеграционных тестов
 jest.setTimeout(60000);
