@@ -408,7 +408,7 @@ try {
 ## 🤝 Поддержка
 
 - [Документация T-Bank API](https://www.tbank.ru/kassa/develop/)
-- [Issues на GitHub](https://github.com/your-username/tbank-payments/issues)
+- [Issues на GitHub](https://github.com/esurkov1/tbank-payments/issues)
 
 ## 📄 Лицензия
 
