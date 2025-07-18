@@ -22,7 +22,7 @@ class TbankPayments {
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'tbank-payments-node/2.0.0'
+        'User-Agent': 'tbank-payments-node/1.0.4'
       }
     };
   }
@@ -34,8 +34,7 @@ class TbankPayments {
     // Собираем только корневые параметры, исключая вложенные объекты и массивы
     const rootParams = {};
     for (const [key, value] of Object.entries(params)) {
-      if (key !== 'Receipt' && key !== 'DATA' && key !== 'Token' && 
-          typeof value !== 'object' && value !== null && value !== undefined) {
+      if (key !== 'Token' && typeof value !== 'object' && value !== undefined) {
         rootParams[key] = value;
       }
     }
